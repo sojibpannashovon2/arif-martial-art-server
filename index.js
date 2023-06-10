@@ -34,9 +34,22 @@ async function run() {
         await client.connect();
 
         const classDBCollection = client.db("martialArt").collection("class")
+        const instructoDBCollection = client.db("martialArt").collection("instructor")
 
         //get data from class json in db
-
+        app.get("/classes", async (req, res) => {
+            const query = {}
+            const classes = classDBCollection.find(query)
+            const result = await classes.toArray()
+            res.send(result)
+        })
+        //get data from instructor json in db
+        app.get("/instructors", async (req, res) => {
+            const query = {}
+            const classes = instructoDBCollection.find(query)
+            const result = await classes.toArray()
+            res.send(result)
+        })
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
