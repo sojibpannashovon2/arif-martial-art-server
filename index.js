@@ -35,6 +35,7 @@ async function run() {
 
         const classDBCollection = client.db("martialArt").collection("class")
         const instructoDBCollection = client.db("martialArt").collection("instructor")
+        const cartDBCollection = client.db("martialArt").collection("cart")
 
         //get data from class json in db
         app.get("/classes", async (req, res) => {
@@ -50,6 +51,23 @@ async function run() {
             const result = await classes.toArray()
             res.send(result)
         })
+
+        //post a cart data to mongodb
+
+        app.post("/carts", async (req, res) => {
+            const cartBody = req.body;
+            const result = await cartDBCollection.insertOne(cartBody)
+            res.send(result)
+        })
+
+        //get a cart data to mongodb
+        app.get("/carts", async (req, res) => {
+            const query = {}
+            const classes = cartDBCollection.find(query)
+            const result = await classes.toArray()
+            res.send(result)
+        })
+
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
