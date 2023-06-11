@@ -36,6 +36,46 @@ async function run() {
         const classDBCollection = client.db("martialArt").collection("class")
         const instructoDBCollection = client.db("martialArt").collection("instructor")
         const cartDBCollection = client.db("martialArt").collection("cart")
+        const userDBCollection = client.db("martialArt").collection("user")
+
+        //post a cart data to mongodb
+
+        app.post("/users", async (req, res) => {
+            const userBody = req.body;
+            const query = { email: userBody.email }
+
+            const existingUser = await userDBCollection.findOne(query)
+            console.log("Existing User: ", existingUser);
+            if (existingUser) {
+                return res.send({ meassage: "User Already Exist" })
+            }
+            const result = await userDBCollection.insertOne(userBody)
+            res.send(result)
+        })
+
+        //get user from mongodb
+
+        app.get("/users", async (req, res) => {
+            const query = {}
+            const classes = userDBCollection.find(query)
+            const result = await classes.toArray()
+            res.send(result)
+        })
+
+        //update user to admin 
+
+        app.patch("/users/admin/:id", async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) }
+
+            const updateDoc = {
+                $set: {
+                    role: 'admin'
+                },
+            };
+            const result = await userDBCollection.updateOne(filter, updateDoc)
+            res.send(result);
+        })
 
         //get data from class json in db
         app.get("/classes", async (req, res) => {
@@ -63,7 +103,7 @@ async function run() {
         //get a cart data to mongodb
         app.get("/carts", async (req, res) => {
             const email = req.query.email
-            console.log(email);
+            // console.log(email);
             if (!email) {
                 res.send([])
             }
