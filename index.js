@@ -76,6 +76,20 @@ async function run() {
             const result = await userDBCollection.updateOne(filter, updateDoc)
             res.send(result);
         })
+        //update user to instructor
+
+        app.patch("/users/instructor/:id", async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) }
+
+            const updateDoc = {
+                $set: {
+                    role: 'instructor'
+                },
+            };
+            const result = await userDBCollection.updateOne(filter, updateDoc)
+            res.send(result);
+        })
 
         //get data from class json in db
         app.get("/classes", async (req, res) => {
