@@ -98,7 +98,7 @@ async function run() {
             const query = { email: email }
             const user = await userDBCollection.findOne(query)
             const result = { admin: user?.role === 'admin' }
-            console.log(result);
+
             res.send(result);
         })
         // identify instructor from db
@@ -108,7 +108,7 @@ async function run() {
             const query = { email: email }
             const user = await userDBCollection.findOne(query)
             const result = { instructor: user?.role === 'instructor' }
-            console.log(result);
+
             res.send(result);
         })
 
@@ -146,7 +146,7 @@ async function run() {
         //get a cart data to mongodb
         app.get("/carts", async (req, res) => {
             const email = req.query.email
-            // console.log(email);
+
             if (!email) {
                 res.send([])
             }
@@ -162,12 +162,9 @@ async function run() {
             const result = await cartDBCollection.deleteOne(query)
             res.send(result);
         })
-        // Send a ping to confirm a successful connection
-        // await client.db("admin").command({ ping: 1 });
-        // console.log("Pinged your deployment. You successfully connected to MongoDB!");
+
     } finally {
-        // Ensures that the client will close when you finish/error
-        // await client.close();
+
     }
 }
 run().catch(console.dir);
