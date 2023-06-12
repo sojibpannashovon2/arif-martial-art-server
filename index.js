@@ -91,11 +91,29 @@ async function run() {
             res.send(result);
         })
 
+        // identify admin from db
+
+        app.get("/users/admin/:email", async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email }
+            const user = await userDBCollection.findOne(query)
+            const result = { admin: user?.role === 'admin' }
+            res.send(result);
+        })
+
         //get data from class json in db
         app.get("/classes", async (req, res) => {
             const query = {}
             const classes = classDBCollection.find(query)
             const result = await classes.toArray()
+            res.send(result)
+        })
+
+        //post data to classes from instructor json in db
+        app.post("/classes", async (req, res) => {
+            const body = req.body;
+
+            const result = await classDBCollection.insertOne(body)
             res.send(result)
         })
         //get data from instructor json in db
