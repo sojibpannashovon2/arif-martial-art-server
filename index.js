@@ -120,7 +120,7 @@ async function run() {
             res.send(result)
         })
 
-        //update classes by user
+        //update classes by user here
 
         //post data to classes from instructor json in db
         app.post("/classes", async (req, res) => {
